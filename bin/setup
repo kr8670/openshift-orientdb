@@ -11,7 +11,7 @@ orientdb_version_dir=${OPENSHIFT_ORIENTDB_DIR}/versions/${version}
 orientdb_env_dir="${OPENSHIFT_ORIENTDB_DIR}/env"
 
 #########################################
-ls $ORIENTDB_HOME
+rm -Rf $ORIENTDB_HOME
 echo -n 'Setting up home directory.....'
 echo '\n'
 ls $ORIENTDB_HOME
