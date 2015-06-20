@@ -13,10 +13,6 @@ orientdb_env_dir="${OPENSHIFT_ORIENTDB_DIR}/env"
 #########################################
 rm -Rf $ORIENTDB_HOME
 echo -n 'Setting up home directory.....'
-echo '\n'
-ls $ORIENTDB_HOME
-echo '\n'
-echo $ORIENTDB_HOME
 
 mkdir -p ${ORIENTDB_HOME}/{config,databases,plugins}
 
