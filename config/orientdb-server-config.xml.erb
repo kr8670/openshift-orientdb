@@ -24,6 +24,7 @@
             <parameters>
                 <parameter value="false" name="enabled"/>
                 <parameter value="4h" name="delay"/>
+                <parameter value="23:00:00" name="firstTime"/>
                 <parameter value="backup" name="target.directory"/>
                 <parameter value="${DBNAME}-${DATE:yyyyMMddHHmmss}.zip" name="target.fileName"/>
                 <parameter value="9" name="compressionLevel"/>
@@ -35,7 +36,7 @@
         <handler class="com.orientechnologies.orient.server.handler.OServerSideScriptInterpreter">
             <parameters>
                 <parameter value="true" name="enabled"/>
-                <parameter value="SQL" name="allowedLanguages"/>
+                <parameter value="SQL,Javascript" name="allowedLanguages"/>
             </parameters>
         </handler>
         <handler class="com.orientechnologies.orient.server.token.OrientTokenHandler">
@@ -44,6 +45,11 @@
                 <parameter value="" name="oAuth2Key"/>
                 <parameter value="60" name="sessionLength"/>
                 <parameter value="HmacSHA256" name="encryptionAlgorithm"/>
+            </parameters>
+        </handler>
+        <handler class="com.orientechnologies.orient.server.plugin.livequery.OLiveQueryPlugin">
+            <parameters>
+                <parameter value="false" name="enabled"/>
             </parameters>
         </handler>
     </handlers>
@@ -76,7 +82,7 @@
             <listener protocol="binary" socket="default" port-range="2424-2430" ip-address="<%= ENV['OPENSHIFT_ORIENTDB_DB_HOST'] %>"/>
             <listener protocol="http" socket="default" port-range="2480-2490" ip-address="<%= ENV['OPENSHIFT_ORIENTDB_DB_HOST_WEB'] %>">
                 <commands>
-                    <command implementation="com.orientechnologies.orient.server.network.protocol.http.command.get.OServerCommandGetStaticContent" pattern="GET|www GET|studio/ GET| GET|*.htm GET|*.html GET|*.xml GET|*.jpeg GET|*.jpg GET|*.png GET|*.gif GET|*.js GET|*.css GET|*.swf GET|*.ico GET|*.txt GET|*.otf GET|*.pjs GET|*.svg GET|*.json GET|*.woff GET|*.ttf GET|*.svgz" stateful="false">
+                    <command implementation="com.orientechnologies.orient.server.network.protocol.http.command.get.OServerCommandGetStaticContent" pattern="GET|www GET|studio/ GET| GET|*.htm GET|*.html GET|*.xml GET|*.jpeg GET|*.jpg GET|*.png GET|*.gif GET|*.js GET|*.css GET|*.swf GET|*.ico GET|*.txt GET|*.otf GET|*.pjs GET|*.svg GET|*.json GET|*.woff GET|*.woff2 GET|*.ttf GET|*.svgz" stateful="false">
                         <parameters>
                             <entry value="Cache-Control: no-cache, no-store, max-age=0, must-revalidate\r\nPragma: no-cache" name="http.cache:*.htm *.html"/>
                             <entry value="Cache-Control: max-age=120" name="http.cache:default"/>
@@ -86,6 +92,7 @@
                 </commands>
                 <parameters>
                     <parameter value="utf-8" name="network.http.charset"/>
+                    <parameter value="true" name="network.http.jsonResponseError"/>
                 </parameters>
             </listener>
         </listeners>
@@ -93,7 +100,7 @@
     <storages/>
     <users>
         <user resources="*" password="<%= ENV['OPENSHIFT_ORIENTDB_DB_PASSWORD'] %>" name="<%= ENV['OPENSHIFT_ORIENTDB_DB_USERNAME'] %>"/>
-        <user resources="connect,server.listDatabases,server.dblist" password="guest" name="guest"/>
+        <user resources="connect,server.listDatabases,server.dblist" password="{SHA-256}84983C60F7DAADC1CB8698621F802C0D9F9A3C3C295C810748FB048115C186EC" name="guest"/>
     </users>
     <properties>
         <entry value="1" name="db.pool.min"/>
@@ -102,4 +109,5 @@
         <entry value="info" name="log.console.level"/>
         <entry value="fine" name="log.file.level"/>
     </properties>
+    <isAfterFirstTime>true</isAfterFirstTime>
 </orient-server>
